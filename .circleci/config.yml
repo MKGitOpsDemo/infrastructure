@@ -11,6 +11,7 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run:
+          context: DevOpsProd
           filters:
             branches:
               only:
@@ -20,6 +21,7 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run:
+          context: DevOpsQA
           filters:
             branches:
               only:
@@ -29,6 +31,7 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run:
+          context: DevOpsDev
           filters:
             branches:
               only:
