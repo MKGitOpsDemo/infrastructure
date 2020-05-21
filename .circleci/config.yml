@@ -7,7 +7,7 @@ orbs:
 # Orchestrate or schedule a set of jobs
 workflows:
   # Name the workflow "welcome"
-  welcome:
+  welcome_prod:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run:
@@ -15,3 +15,21 @@ workflows:
             branches:
               only:
                 - master
+
+  welcome_qa:
+    # Run the welcome/run job in its own container
+    jobs:
+      - welcome/run:
+          filters:
+            branches:
+              only:
+                - qa
+
+  welcome_dev:
+    # Run the welcome/run job in its own container
+    jobs:
+      - welcome/run:
+          filters:
+            branches:
+              only:
+                - dev-*
