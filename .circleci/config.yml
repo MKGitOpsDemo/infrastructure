@@ -35,10 +35,10 @@ jobs:
     steps:
       - checkout
       - run:
-          command: terraform init -input=false /root/repo
+          command: terraform init -input=false $CIRCLE_WORKING_DIRECTORY
       - run:
           name: Validate
-          command: terraform validate /root/repo
+          command: terraform validate $CIRCLE_WORKING_DIRECTORY
 
       - persist_to_workspace:
           root: .
@@ -62,3 +62,5 @@ workflows:
             branches:
               only:
                 - /dev-.*/
+          requires:
+            - validate
