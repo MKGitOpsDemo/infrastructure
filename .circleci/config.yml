@@ -23,9 +23,7 @@ jobs:
 
       - terraform/plan:
           path: /root/repo
-          backend_config:
-            - "key=k"
-            - "bucket=b"
+          backend_config: "key=k,bucket=b"
 
       # - terraform/apply:
       #     path: /root/repo/core_infra
