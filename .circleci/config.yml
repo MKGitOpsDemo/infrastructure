@@ -35,10 +35,10 @@ jobs:
     steps:
       - checkout
       - run:
-          command: terraform init -input=false $CIRCLE_WORKING_DIRECTORY
+          command: terraform init -input=false /root/project
       - run:
           name: Validate
-          command: terraform validate $CIRCLE_WORKING_DIRECTORY
+          command: terraform validate /root/project
 
       - persist_to_workspace:
           root: .
