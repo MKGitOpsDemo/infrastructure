@@ -38,7 +38,7 @@ jobs:
           command: terraform init -input=false -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" -backend-config="bucket=$TERRAFORM_BUCKET" /root/project
       - run:
           name: Validate
-          command: terraform validate -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" -backend-config="bucket=$TERRAFORM_BUCKET" /root/project
+          command: terraform validate /root/project
 
       - persist_to_workspace:
           root: .
