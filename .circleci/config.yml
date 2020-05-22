@@ -4,7 +4,7 @@ orbs:
   terraform: ovotech/terraform@1.6.6
 
 jobs:
-  build:
+  deploy:
     executor: terraform/terraform-0_12
 
     working_directory: ~/repo
@@ -29,11 +29,34 @@ jobs:
       #     path: /root/repo/core_infra
       #     auto_approve: true
 
+  validate:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+      - run:
+          command: terraform init -input=false /root/repo
+      - run:
+          name: Validate
+          command: terraform validate /root/repo
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./*
+
 workflows:
   version: 2
-  build_and_test:
+  validate_and_deploy:
     jobs:
-      - build:
+      - validate:
+          context: DevOpsDev
+          filters:
+            branches:
+              only:
+                - /dev-.*/
+
+      - deploy:
           context: DevOpsDev
           filters:
             branches:
