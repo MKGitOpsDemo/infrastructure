@@ -1,23 +1,33 @@
-# module "InfraPatternBook" {
-#     source = "./InfraPatternBook"
+terraform {
+  backend "s3" {
+    # bucket         = var.state_bucket_name
+    # key            = "global/s3/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}
+
+# variable "state_bucket_name" {
+#     default = "terraform-state"
 # }
 
-variable "state_bucket_name" {
-    default = "terraform-state"
-}
+# variable "state_lock_table" {
+#     default = "terraform-locks"
+# }
 
-variable "state_lock_table" {
-    default = "terraform-locks"
-}
-
-variable "region" {
-    default = "us-east-1"
-}
+# variable "region" {
+#     default = "us-east-1"
+# }
 
 provider "aws" {
     profile    = "default"
     region     = var.region
 }
+
+# module "InfraPatternBook" {
+#     source = "./InfraPatternBook"
+# }
 
 # module "pat-ntier" {
 #   source    = "./InfraPatternBook/aws/patterns/ntier/"
