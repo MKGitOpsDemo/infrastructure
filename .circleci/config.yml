@@ -35,7 +35,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: terraform init -input=false /root/project -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" -backend-config="bucket=$TERRAFORM_BUCKET"
+          command: terraform init -input=false /root/project
       - run:
           name: Validate
           command: terraform validate /root/project  -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" -backend-config="bucket=$TERRAFORM_BUCKET"
