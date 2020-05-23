@@ -33,8 +33,6 @@ jobs:
           command: >
             terraform apply 
             -auto-approve 
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
       - run:
           name: Store Native Output
@@ -49,16 +47,12 @@ jobs:
           command: >
             terraform output
             -json 
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
             > /tmp/artifacts/tf_out.json
       - run:
           name: Store Updated Config
           command: >
             terraform show
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
             > /tmp/artifacts/tf_show
       - run:
@@ -66,8 +60,6 @@ jobs:
           command: >
             terraform show
             -json
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
             > /tmp/artifacts/tf_show.json
       - store_artifacts:
