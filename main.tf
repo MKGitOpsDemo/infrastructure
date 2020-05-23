@@ -53,3 +53,7 @@ provider "aws" {
 #     }
 #   }
 # }
+
+output "_ci" {
+  value = "ci"
+}
