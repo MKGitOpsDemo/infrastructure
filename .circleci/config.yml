@@ -7,7 +7,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: init
+          name: Prep Artifacts
+          command: |
+            mkdir /tmp/artifacts;
+            echo `date` > /tmp/artifacts/head;
+            echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
+            echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
+            echo $CIRCLE_PROJECT_REPONAME >> /tmp/artifacts/head;
+            echo $CIRCLE_PULL_REQUEST >> /tmp/artifacts/head;
+      - run:
+          name: Terraform Init
           command: >
             terraform init 
             -input=false 
@@ -15,7 +24,7 @@ jobs:
             -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
       - run:
-          name: plan
+          name: Terraform Plan
           command: >
             terraform plan 
             -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
@@ -23,7 +32,7 @@ jobs:
             /root/project
             > /tmp/artifacts/tf_plan
       - run:
-          name: apply
+          name: Terraform Apply
           command: >
             terraform apply 
             -auto-approve 
@@ -77,15 +86,6 @@ jobs:
       - image: hashicorp/terraform:light
     steps:
       - checkout
-      - run:
-          name: Prep Artifacts
-          command: |
-            mkdir /tmp/artifacts;
-            echo `date` > /tmp/artifacts/head;
-            echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
-            echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
-            echo $CIRCLE_PROJECT_REPONAME >> /tmp/artifacts/head;
-            echo $CIRCLE_PULL_REQUEST >> /tmp/artifacts/head;
       - run:
           command: >
             terraform init 
