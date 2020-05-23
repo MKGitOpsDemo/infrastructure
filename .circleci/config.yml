@@ -45,20 +45,17 @@ jobs:
           command: >
             terraform output
             -json 
-            /root/project
             > /tmp/artifacts/tf_out.json
       - run:
           name: Store Updated Config
           command: >
             terraform show
-            /root/project
             > /tmp/artifacts/tf_show
       - run:
           name: Store Updated Config as JSON
           command: >
             terraform show
             -json
-            /root/project
             > /tmp/artifacts/tf_show.json
       - store_artifacts:
           path: /tmp/artifacts
