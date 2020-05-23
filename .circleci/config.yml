@@ -67,6 +67,7 @@ jobs:
           name: Store Updated Config
           command: >
             terraform show
+            -no-color
             > /tmp/artifacts/tf_show
       - run:
           name: Store Updated Config as JSON
