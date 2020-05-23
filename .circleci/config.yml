@@ -12,7 +12,6 @@ jobs:
             mkdir /tmp/artifacts;
             echo `date` > /tmp/artifacts/head;
             echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
-            echo $CIRCLE_BRANCH >> /tmp/artifacts/head;
             echo $CIRCLE_PROJECT_REPONAME >> /tmp/artifacts/head;
             echo $CIRCLE_PULL_REQUEST >> /tmp/artifacts/head;
       - run:
@@ -27,8 +26,6 @@ jobs:
           name: Terraform Plan
           command: >
             terraform plan 
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
             > /tmp/artifacts/tf_plan
       - run:
