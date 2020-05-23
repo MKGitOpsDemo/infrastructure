@@ -26,8 +26,8 @@ jobs:
           name: Terraform Plan
           command: >
             terraform plan 
+            -out=/tmp/artifacts/tf_plan
             /root/project
-            > /tmp/artifacts/tf_plan
       - run:
           name: Terraform Apply
           command: >
@@ -38,8 +38,6 @@ jobs:
           name: Store Native Output
           command: >
             terraform output 
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
             /root/project
             > /tmp/artifacts/tf_out
       - run:
