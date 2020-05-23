@@ -86,7 +86,7 @@ jobs:
           command: |
             mkdir /tmp/test-results
             mkdir /tmp/test-results/dummy
-            echo "{'test':'pass'}" > /tmp/test-results/dummy/results.json
+            echo "<test><result>pass</result></test>" > /tmp/test-results/dummy/results.xml
       - store_test_results:
           path: /tmp/test-results
 
