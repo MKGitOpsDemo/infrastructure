@@ -86,11 +86,11 @@ jobs:
           command: |
             mkdir /tmp/test-results
             mkdir /tmp/test-results/dummy
-            echo "<testsuite tests="3">
-              <testcase classname="foo1" name="ASuccessfulTest"/>
-              <testcase classname="foo2" name="AnotherSuccessfulTest"/>
-              <testcase classname="foo3" name="AFailingTest">
-                <failure type="NotEnoughFoo"> details about failure </failure>
+            echo "<testsuite tests='3'>
+              <testcase classname='foo1' name='ASuccessfulTest'/>
+              <testcase classname='foo2' name='AnotherSuccessfulTest'/>
+              <testcase classname='foo3' name='AFailingTest'>
+                <failure type='NotEnoughFoo'> details about failure </failure>
               </testcase>
               </testsuite>" > /tmp/test-results/dummy/results.xml
       - store_test_results:
