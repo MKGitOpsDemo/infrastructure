@@ -1,6 +1,24 @@
 version: 2.1
 
 jobs:
+  validate:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+      - run:
+          command: >
+            terraform init 
+            -input=false 
+            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
+            -backend-config="bucket=$TERRAFORM_BUCKET" 
+            /root/project
+      - run:
+          name: Validate
+          command: >
+            terraform validate 
+            /root/project
+
   deploy:
     docker:
       - image: hashicorp/terraform:light
@@ -59,37 +77,20 @@ jobs:
       - store_artifacts:
           path: /tmp/artifacts
 
-      # - persist_to_workspace:
-      #     root: .
-      #     paths:
-      #       - ./*
-
-  validate:
-    docker:
-      - image: hashicorp/terraform:light
+  test:
     steps:
       - checkout
       - run:
-          command: >
-            terraform init 
-            -input=false 
-            -backend-config="key=global/s3/$CIRCLE_BRANCH/terraform.tfstate" 
-            -backend-config="bucket=$TERRAFORM_BUCKET" 
-            /root/project
-      - run:
-          name: Validate
-          command: >
-            terraform validate 
-            /root/project
-
-      # - persist_to_workspace:
-      #     root: .
-      #     paths:
-      #       - ./*
+          command: |
+            mkdir /tmp/test-results
+            mkdir /tmp/test-results/dummy
+            echo "{'test':'pass'}" > /tmp/test-results/dummy/results.json
+      - store_test_results:
+          path: /tmp/test-results
 
 workflows:
   version: 2
-  validate_and_deploy:
+  validate_deploy_test:
     jobs:
       - validate:
           context: DevOpsDev
@@ -106,3 +107,62 @@ workflows:
                 - /dev-.*/
           requires:
             - validate
+
+      - test:
+          context: DevOpsDev
+          filters:
+            branches:
+              only:
+                - /dev-.*/
+          requires:
+            - deploy
+
+      - validate:
+          context: DevOpsQA
+          filters:
+            branches:
+              only:
+                - qa
+
+      - deploy:
+          context: DevOpsQA
+          filters:
+            branches:
+              only:
+                - qa
+          requires:
+            - validate
+
+      - test:
+          context: DevOpsQA
+          filters:
+            branches:
+              only:
+                - qa
+          requires:
+            - deploy
+
+      - validate:
+          context: DevOpsProd
+          filters:
+            branches:
+              only:
+                - master
+
+      - deploy:
+          context: DevOpsProd
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - validate
+
+      - test:
+          context: DevOpsProd
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - deploy
